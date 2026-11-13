@@ -1,12 +1,11 @@
 # Solar PPA STeP
 
-Static site package for Vercel. Keep `index.html` and the `assets` folder together.
+รายงานสรุป Solar PPA ขนาด 300 kWp สำหรับ STeP เผยแพร่เป็นเว็บไซต์สแตติกบน Vercel
 
-## Deploy to the existing Vercel project
+## ไฟล์เว็บไซต์
 
-1. Install the Vercel CLI and sign in to the account that owns `razor-4294/solarppastep`.
-2. Open a terminal in this folder.
-3. Run `vercel link` and select the existing `solarppastep` project.
-4. Run `vercel --prod` to publish this static site.
+- `index.html` เป็นหน้าเว็บหลัก
+- `assets/solar-ppa-installation-site.png` เป็นภาพสถานที่ติดตั้ง
+- `assets/solar-rooftop-topview.svg` เป็นภาพแนวคิดการจัดวางแผงแบบ TOP VIEW
 
-The page and two images are included. The linked source PDF is intentionally not included in this public deployment bundle.
+โปรเจกต์ Vercel เชื่อมกับ repository นี้ โดยใช้ root directory ของ repository และ deploy จาก branch `main`
