@@ -68,18 +68,18 @@ th{font-size:12px;font-weight:700}td{font-size:14px;font-weight:400}.formula,.no
     const delta=annual-base, deltaTotal=total-baseTotal;
     const phrase=discount===0.2525?'เท่ากับสัญญา 25.25%':(delta>=0?'ผลประหยัดเพิ่มขึ้น ':'ผลประหยัดลดลง ');
     document.getElementById('deltaSaving').textContent='เทียบกับส่วนลด 25.25%: '+phrase+(discount===0.2525?'':money(Math.abs(delta))+' บาท/ปี และ '+money(Math.abs(deltaTotal))+' บาทตลอด 20 ปี');
-    document.getElementById('compareTitle').textContent='เทียบทุกตัวเลือกที่การใช้เอง '+Math.round(use*100)+'%';
+    document.getElementById('compareTitle').textContent='เปรียบเทียบส่วนลด · เลือก '+(discount*100).toFixed(discount===0.2525?2:0)+'% · ใช้เอง '+Math.round(use*100)+'%';
     const rows=discounts.map(d=>{
-      const tableGrid=4.467263631386379, price=tableGrid*(1-d), savingPerUnit=tableGrid-price, first=used*savingPerUnit, lifetime=first*factor;
-      return `<tr class="${d===0.40?'featured':''}"><td>${d===0.40?'<strong>':''}${(d*100).toFixed(d===0.2525?2:0)}%${d===0.40?'</strong>':''}</td><td>${unit(price)} บาท</td><td>${unit(savingPerUnit)} บาท</td><td>${money(first)} บาท</td><td>${(lifetime/1000000).toFixed(2)} ล้านบาท</td></tr>`;
+      const price=grid*(1-d), savingPerUnit=grid-price, first=used*savingPerUnit, lifetime=first*factor, selected=Math.abs(d-discount)<0.000001;
+      return `<tr class="${selected?'featured':''}"><td>${selected?'<strong>':''}${(d*100).toFixed(d===0.2525?2:0)}%${selected?'</strong>':''}</td><td>${selected?'<strong>':''}${unit(price)} บาท${selected?'</strong>':''}</td><td>${selected?'<strong>':''}${unit(savingPerUnit)} บาท${selected?'</strong>':''}</td><td>${selected?'<strong>':''}${money(first)} บาท${selected?'</strong>':''}</td><td>${selected?'<strong>':''}${(lifetime/1000000).toFixed(2)} ล้านบาท${selected?'</strong>':''}</td></tr>`;
     }).join('');
     document.getElementById('comparisonRows').innerHTML=rows;
-    const tableGrid=4.467263631386379, investment=6900000;
+    const investment=6900000;
     document.getElementById('investorRows').innerHTML=discounts.map(d=>{
-      const revenue=used*tableGrid*(1-d), revenueTotal=revenue*factor;
+      const revenue=used*grid*(1-d), revenueTotal=revenue*factor, selected=Math.abs(d-discount)<0.000001;
       let elapsed=0, cumulative=0, payback=null;
       for(let year=0;year<years;year++){const annualRevenue=revenue*Math.pow(1-degradation,year);if(cumulative+annualRevenue>=investment){payback=elapsed+(investment-cumulative)/annualRevenue;break;}cumulative+=annualRevenue;elapsed++;}
-      return `<tr class="${d===0.40?'featured':''}"><td>${d===0.40?'<strong>':''}${(d*100).toFixed(d===0.2525?2:0)}%${d===0.40?'</strong>':''}</td><td>${money(revenue)} บาท</td><td>${(revenueTotal/1000000).toFixed(2)} ล้านบาท</td><td>${payback===null?'เกิน 20 ปี':'ประมาณ '+payback.toFixed(1)+' ปี'}</td></tr>`;
+      return `<tr class="${selected?'featured':''}"><td>${selected?'<strong>':''}${(d*100).toFixed(d===0.2525?2:0)}%${selected?'</strong>':''}</td><td>${selected?'<strong>':''}${money(revenue)} บาท${selected?'</strong>':''}</td><td>${selected?'<strong>':''}${(revenueTotal/1000000).toFixed(2)} ล้านบาท${selected?'</strong>':''}</td><td>${selected?'<strong>':''}${payback===null?'เกิน 20 ปี':'ประมาณ '+payback.toFixed(1)+' ปี'}${selected?'</strong>':''}</td></tr>`;
     }).join('');
   }
   document.querySelectorAll('[data-discount]').forEach(btn=>btn.addEventListener('click',()=>{discount=Number(btn.dataset.discount);document.querySelectorAll('[data-discount]').forEach(b=>{const active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});update();}));
